@@ -147,7 +147,10 @@ class DashboardDetailEndpointsTest extends TestCase
         $response = $this->get("/laraprints/export?type=page_views&start={$today}&end={$today}");
 
         $response->assertOk();
-        $response->assertHeader('content-type', 'text/csv; charset=UTF-8');
+        $this->assertSame(
+            'text/csv; charset=utf-8',
+            strtolower((string) $response->headers->get('content-type'))
+        );
 
         $csv = $response->streamedContent();
         $this->assertStringContainsString('session_id,visit_id,path,device_type', $csv);

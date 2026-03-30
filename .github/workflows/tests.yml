@@ -70,7 +70,7 @@ jobs:
           tools: composer:v2
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.composer/cache/files
           key: ${{ runner.os }}-php${{ matrix.php }}-laravel${{ matrix.laravel }}-low${{ matrix.prefer_lowest }}-${{ hashFiles('composer.lock', 'composer.json') }}
@@ -78,14 +78,18 @@ jobs:
             ${{ runner.os }}-php${{ matrix.php }}-laravel${{ matrix.laravel }}-low${{ matrix.prefer_lowest }}-
             ${{ runner.os }}-php${{ matrix.php }}-
 
-      - name: Pin matrix dependencies
+      - name: Pin framework dependencies
         run: |
-          composer require --dev --no-interaction --no-update \
+          composer require --no-interaction --no-update \
             "illuminate/support:${{ matrix.laravel }}" \
             "illuminate/database:${{ matrix.laravel }}" \
             "illuminate/queue:${{ matrix.laravel }}" \
             "illuminate/routing:${{ matrix.laravel }}" \
-            "illuminate/http:${{ matrix.laravel }}" \
+            "illuminate/http:${{ matrix.laravel }}"
+
+      - name: Pin test dependencies
+        run: |
+          composer require --dev --no-interaction --no-update \
             "orchestra/testbench:${{ matrix.testbench }}" \
             "phpunit/phpunit:${{ matrix.phpunit }}"
 
