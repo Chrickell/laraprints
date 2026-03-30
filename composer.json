@@ -47,7 +47,9 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "test:strict": "vendor/bin/phpunit --fail-on-warning --fail-on-risky --do-not-cache-result",
+        "test:random": "vendor/bin/phpunit --order-by=random --do-not-cache-result"
     },
     "minimum-stability": "stable",
     "prefer-stable": true

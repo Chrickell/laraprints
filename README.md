@@ -89,6 +89,29 @@ Checks config, all database tables, middleware registration, queue driver, geo a
 
 ---
 
+## Testing & Release Readiness
+
+For package development:
+
+```bash
+# Validate package metadata
+composer validate --strict
+
+# Run the full backend suite
+composer test
+```
+
+This repository includes a GitHub Actions matrix (`.github/workflows/tests.yml`) that runs tests across:
+- Laravel 10 / Testbench 8 / PHP 8.1 (including a `--prefer-lowest` run)
+- Laravel 11 / Testbench 9 / PHP 8.2
+- Laravel 12 / Testbench 10 / PHP 8.3
+
+### Are frontend tests required?
+
+Not strictly for this package to be installable, because distribution is Composer-first and the critical install/runtime behavior is in PHP (service provider, routes, middleware, jobs, commands, and migrations).
+
+Frontend tests are still recommended when changing published Vue components or the tracking composable in ways that could regress behavior.
+
 ## Page View Tracking
 
 The `TrackPageViews` middleware intercepts incoming requests and dispatches a queued `StorePageView` job. Nothing is written synchronously.

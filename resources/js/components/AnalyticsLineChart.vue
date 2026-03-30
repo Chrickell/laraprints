@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" ref="wrapperEl" @mousemove="onMove" @mouseleave="hovered = null">
+  <div class="relative" ref="wrapperEl" @mouseleave="hovered = null">
 
     <!-- Loading -->
     <div v-if="loading" class="animate-pulse rounded-xl bg-linear-to-r from-gray-100 to-gray-50" :style="{ height: (H + 40) + 'px' }" />
@@ -55,7 +55,13 @@
       </div>
 
       <!-- SVG -->
-      <svg :viewBox="`0 0 ${W} ${H}`" class="w-full overflow-visible" :style="{ height: H + 'px' }">
+      <svg
+        ref="svgEl"
+        :viewBox="`0 0 ${W} ${H}`"
+        class="w-full overflow-visible"
+        :style="{ height: H + 'px' }"
+        @mousemove="onMove"
+      >
         <defs>
           <linearGradient :id="`${uid}-pv`" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#6366f1" stop-opacity="0.2" />
@@ -172,14 +178,16 @@ const pvArea = computed(() => smoothArea(pvPts.value))
 const clArea = computed(() => smoothArea(clPts.value))
 
 // ─── Hover ────────────────────────────────────────────────────────────────────
-const wrapperEl  = ref(null)
-const hovered    = ref(null)
+const wrapperEl   = ref(null)
+const svgEl       = ref(null)
+const hovered     = ref(null)
 const tooltipLeft = ref(0)
 
 const onMove = (event) => {
-  const el = wrapperEl.value
-  if (!el || !props.data.length) return
-  const rect  = el.getBoundingClientRect()
+  const svg = svgEl.value
+  const wrapper = wrapperEl.value
+  if (!svg || !wrapper || !props.data.length) return
+  const rect  = svg.getBoundingClientRect()
   const mouseX = event.clientX - rect.left
   const scaleX = W / rect.width
   const svgX   = mouseX * scaleX
@@ -196,8 +204,9 @@ const onMove = (event) => {
     clicks:     d.clicks     ?? 0,
   }
   // Snap tooltip X to the nearest data point (same as crosshair), clamped to avoid overflow
-  const snapX = pvPts.value[i].x / W * rect.width
-  tooltipLeft.value = Math.max(80, Math.min(rect.width - 80, snapX))
+  const wrapperRect = wrapper.getBoundingClientRect()
+  const snapX = rect.left - wrapperRect.left + (pvPts.value[i].x / W * rect.width)
+  tooltipLeft.value = Math.max(80, Math.min(wrapperRect.width - 80, snapX))
 }
 
 // ─── Formatters ───────────────────────────────────────────────────────────────

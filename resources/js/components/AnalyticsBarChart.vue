@@ -30,6 +30,7 @@
       <!-- Bars -->
       <div
         class="flex items-end gap-px overflow-hidden rounded-b-sm"
+        ref="barsEl"
         style="height: 160px;"
         @mouseleave="hovered = null"
       >
@@ -69,6 +70,7 @@ const props = defineProps({
 })
 
 const wrapperEl = ref(null)
+const barsEl    = ref(null)
 const hovered   = ref(null)
 
 const gradients = {
@@ -100,12 +102,14 @@ const fmtDate = (str) => {
 }
 
 const onHover = (event, point, index) => {
-  const rect = wrapperEl.value?.getBoundingClientRect()
-  if (!rect) return
+  const wrapperRect = wrapperEl.value?.getBoundingClientRect()
+  const barRect = event.currentTarget?.getBoundingClientRect()
+  const barsRect = barsEl.value?.getBoundingClientRect()
+  if (!wrapperRect || !barRect || !barsRect) return
   hovered.value = {
     index,
-    x: event.clientX - rect.left,
-    y: event.clientY - rect.top,
+    x: (barRect.left - wrapperRect.left) + (barRect.width / 2),
+    y: barsRect.top - wrapperRect.top,
     value: point[props.valueKey] ?? 0,
     date: fmtDate(point[props.dateKey]),
   }

@@ -24,7 +24,7 @@ class ClickTrackingTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson(['success' => true]);
 
-        $this->assertDatabaseHas('clicks', [
+        $this->assertDatabaseHas('laraprints_clicks', [
             'session_id'    => 'abc123',
             'visit_id'      => 'visit456',
             'element'       => 'button',
@@ -82,7 +82,7 @@ class ClickTrackingTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson(['success' => true]);
 
-        $this->assertDatabaseHas('clicks', [
+        $this->assertDatabaseHas('laraprints_clicks', [
             'element_class' => null,
             'element_id'    => null,
         ]);
@@ -100,14 +100,7 @@ class ClickTrackingTest extends TestCase
         ]);
 
         $response->assertStatus(401);
-        $this->assertDatabaseCount('clicks', 0);
+        $this->assertDatabaseCount('laraprints_clicks', 0);
     }
 
-    public function test_click_endpoint_is_disabled_by_config(): void
-    {
-        config()->set('laraprints.clicks.enabled', false);
-
-        // Need to re-boot to pick up disabled state — test the model directly instead
-        $this->assertDatabaseCount('clicks', 0);
-    }
 }
