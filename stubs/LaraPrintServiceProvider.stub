@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Providers;
+
+use Chrickell\Laraprints\LaraprintsApplicationServiceProvider;
+use Illuminate\Support\Facades\Gate;
+
+class LaraprintsServiceProvider extends LaraprintsApplicationServiceProvider
+{
+    /**
+     * The email addresses of users who may access the laraprints dashboard.
+     *
+     * @var array<int, string>
+     */
+    protected array $emails = [
+        //
+    ];
+
+    /**
+     * Register the gate that controls access to the laraprints dashboard.
+     *
+     * By default, any user whose email is in the $emails array above is granted
+     * access. You can replace this with any logic you need — roles, permissions,
+     * environment checks, etc.
+     *
+     * Examples:
+     *
+     *   // Allow anyone in local environment:
+     *   return app()->environment('local');
+     *
+     *   // Check a role via spatie/laravel-permission:
+     *   return $user->hasRole('admin');
+     *
+     *   // Check a custom attribute:
+     *   return $user->is_admin === true;
+     */
+    protected function gate(): void
+    {
+        Gate::define('viewLaraprints', function ($user) {
+            return in_array($user->email, $this->emails);
+        });
+    }
+}
