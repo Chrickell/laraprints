@@ -32,9 +32,15 @@ class LaraPrintServiceProvider extends ServiceProvider
             __DIR__ . '/../config/laraprints.php' => config_path('laraprints.php'),
         ], 'laraprints-config');
 
-        $this->publishesMigrations([
+        $migrationPaths = [
             __DIR__ . '/../database/migrations' => database_path('migrations'),
-        ], 'laraprints-migrations');
+        ];
+
+        if (method_exists($this, 'publishesMigrations')) {
+            $this->publishesMigrations($migrationPaths, 'laraprints-migrations');
+        } else {
+            $this->publishes($migrationPaths, 'laraprints-migrations');
+        }
 
         $this->publishes([
             __DIR__ . '/../resources/js' => resource_path('js/vendor/laraprints'),
@@ -79,11 +85,30 @@ class LaraPrintServiceProvider extends ServiceProvider
      */
     protected function registerDefaultGate(): void
     {
-        if (! Gate::has('viewLaraprints')) {
+        if (! $this->gateAbilityExists('viewLaraprints')) {
             Gate::define('viewLaraprints', function ($user = null) {
                 return $this->app->environment('local');
             });
         }
+    }
+
+    protected function gateAbilityExists(string $ability): bool
+    {
+        $gate = Gate::getFacadeRoot();
+
+        if (! is_object($gate)) {
+            return false;
+        }
+
+        if (method_exists($gate, 'has')) {
+            return $gate->has($ability);
+        }
+
+        if (method_exists($gate, 'abilities')) {
+            return array_key_exists($ability, $gate->abilities());
+        }
+
+        return false;
     }
 
     protected function registerTrackingRoute(): void

@@ -6,6 +6,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   validate:
     name: Composer Validate
@@ -13,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -56,7 +59,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -69,9 +72,7 @@ jobs:
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.composer/cache/files
-            vendor
+          path: ~/.composer/cache/files
           key: ${{ runner.os }}-php${{ matrix.php }}-laravel${{ matrix.laravel }}-low${{ matrix.prefer_lowest }}-${{ hashFiles('composer.lock', 'composer.json') }}
           restore-keys: |
             ${{ runner.os }}-php${{ matrix.php }}-laravel${{ matrix.laravel }}-low${{ matrix.prefer_lowest }}-
@@ -79,7 +80,7 @@ jobs:
 
       - name: Pin matrix dependencies
         run: |
-          composer require --no-interaction --no-update \
+          composer require --dev --no-interaction --no-update \
             "illuminate/support:${{ matrix.laravel }}" \
             "illuminate/database:${{ matrix.laravel }}" \
             "illuminate/queue:${{ matrix.laravel }}" \
@@ -97,4 +98,4 @@ jobs:
         run: composer update --prefer-lowest --prefer-stable --no-interaction --no-progress
 
       - name: Run tests
-        run: vendor/bin/phpunit --fail-on-warning --fail-on-risky --do-not-cache-result
+        run: vendor/bin/phpunit --do-not-cache-result

@@ -58,7 +58,7 @@
       <svg
         ref="svgEl"
         :viewBox="`0 0 ${W} ${H}`"
-        class="w-full overflow-visible"
+        class="block w-full overflow-visible"
         :style="{ height: H + 'px' }"
         @mousemove="onMove"
       >
