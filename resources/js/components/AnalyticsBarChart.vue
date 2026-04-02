@@ -1,5 +1,5 @@
 <template>
-  <div class="relative select-none" ref="wrapperEl">
+  <div class="relative w-full min-w-0 select-none" ref="wrapperEl">
 
     <!-- Loading skeleton -->
     <div v-if="loading" class="h-44 w-full animate-pulse rounded-xl bg-linear-to-r from-gray-100 to-gray-50" />
@@ -29,7 +29,7 @@
 
       <!-- Bars -->
       <div
-        class="flex items-end gap-px overflow-hidden rounded-b-sm"
+        class="flex w-full items-end gap-px overflow-hidden rounded-b-sm"
         ref="barsEl"
         style="height: 160px;"
         @mouseleave="hovered = null"
@@ -37,7 +37,7 @@
         <div
           v-for="(point, i) in data"
           :key="i"
-          class="relative flex-1 cursor-default rounded-t-sm"
+          class="relative min-w-0 flex-1 cursor-default rounded-t-sm"
           :style="{
             height: barHeight(point[valueKey]),
             background: (hovered && hovered.index !== i) ? fadeGradient : activeGradient,
@@ -48,7 +48,7 @@
       </div>
 
       <!-- Date axis labels -->
-      <div class="mt-3 flex justify-between text-[11px] font-medium text-gray-400">
+      <div class="mt-3 flex w-full justify-between text-[11px] font-medium text-gray-400">
         <span>{{ fmtDate(data[0]?.[dateKey]) }}</span>
         <span>{{ fmtDate(data[Math.floor(data.length / 2)]?.[dateKey]) }}</span>
         <span>{{ fmtDate(data[data.length - 1]?.[dateKey]) }}</span>

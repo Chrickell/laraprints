@@ -1,5 +1,5 @@
 <template>
-  <div class="relative" ref="wrapperEl" @mouseleave="hovered = null">
+  <div class="relative w-full min-w-0" ref="wrapperEl" @mouseleave="hovered = null">
 
     <!-- Loading -->
     <div v-if="loading" class="animate-pulse rounded-xl bg-linear-to-r from-gray-100 to-gray-50" :style="{ height: (H + 40) + 'px' }" />
@@ -15,7 +15,7 @@
     </div>
 
     <!-- Chart -->
-    <div v-else class="relative">
+    <div v-else class="relative w-full min-w-0">
 
       <!-- Legend -->
       <div class="mb-4 flex items-center gap-5">
@@ -96,7 +96,7 @@
       </svg>
 
       <!-- X-axis date labels -->
-      <div class="mt-2 flex justify-between text-[11px] font-medium text-gray-400" style="padding-left: 5.2%">
+      <div class="mt-2 flex w-full justify-between text-[11px] font-medium text-gray-400" style="padding-left: 5.2%">
         <span>{{ fmtDate(data[0]?.date) }}</span>
         <span>{{ fmtDate(data[Math.floor(data.length / 2)]?.date) }}</span>
         <span>{{ fmtDate(data[data.length - 1]?.date) }}</span>
