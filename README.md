@@ -23,11 +23,13 @@ Track page views, clicks, and custom events across your Laravel application. Sto
 | | |
 |---|---|
 | PHP | 8.1+ |
-| Laravel | 10, 11, or 12 |
+| Laravel | 10, 11, 12, or 13 |
 | Queue | Any real queue driver in production (`redis`, `database`, `sqs`, etc.) |
 | Frontend (optional) | Vue 3 — required for the dashboard component and click tracking composable |
 
 > The backend — middleware, API endpoints, models, jobs, and artisan commands — works with any frontend or no frontend at all. The dashboard component and JS composable require Vue 3.
+>
+> Laravel 13 requires PHP 8.3+, even though this package still supports PHP 8.1+ for Laravel 10 compatibility.
 
 ### Queue
 
@@ -105,6 +107,7 @@ This repository includes a GitHub Actions matrix (`.github/workflows/tests.yml`)
 - Laravel 10 / Testbench 8 / PHP 8.1 (including a `--prefer-lowest` run)
 - Laravel 11 / Testbench 9 / PHP 8.2
 - Laravel 12 / Testbench 10 / PHP 8.3
+- Laravel 13 / Testbench 11 / PHP 8.3
 
 ### Are frontend tests required?
 

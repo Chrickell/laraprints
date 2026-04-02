@@ -56,6 +56,11 @@ jobs:
             testbench: "^10.0"
             phpunit: "^11.5"
             prefer_lowest: false
+          - php: "8.3"
+            laravel: "13.x-dev"
+            testbench: "11.x-dev"
+            phpunit: "^12.0"
+            prefer_lowest: false
 
     steps:
       - name: Checkout
